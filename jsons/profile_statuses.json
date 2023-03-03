@@ -1,0 +1,45 @@
+{
+	"current_page": 1,
+	"data": [{
+		"id": 2222222,
+		"teamId": 1111111,
+		"name": "Ban",
+		"color": "red",
+		"deleted": 0
+	}, {
+		"id": 3333333,
+		"teamId": 1111111,
+		"name": "Ready",
+		"color": "green",
+		"deleted": 0
+	}, {
+		"id": 4444444,
+		"teamId": 1111111,
+		"name": "New",
+		"color": "blue",
+		"deleted": 0
+	}],
+	"first_page_url": "https:\/\/dolphin-anty-api.com\/browser_profiles\/statuses?page=1",
+	"from": 1,
+	"last_page": 1,
+	"last_page_url": "https:\/\/dolphin-anty-api.com\/browser_profiles\/statuses?page=1",
+	"links": [{
+		"url": null,
+		"label": "pagination.previous",
+		"active": false
+	}, {
+		"url": "https:\/\/dolphin-anty-api.com\/browser_profiles\/statuses?page=1",
+		"label": "1",
+		"active": true
+	}, {
+		"url": null,
+		"label": "pagination.next",
+		"active": false
+	}],
+	"next_page_url": null,
+	"path": "https:\/\/dolphin-anty-api.com\/browser_profiles\/statuses",
+	"per_page": "50",
+	"prev_page_url": null,
+	"to": 3,
+	"total": 3
+}

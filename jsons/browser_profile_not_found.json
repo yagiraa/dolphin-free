@@ -1,0 +1,8 @@
+{
+	"success": false,
+	"error": {
+		"error": "Browser Profile file not found"
+	},
+	"file": "\/var\/www\/html\/controllers\/getDatadir.php",
+	"line": 10
+}

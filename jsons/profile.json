@@ -1,0 +1,48 @@
+{
+	"data": {
+		"id": 1111111,
+		"teamId": 1111111,
+		"username": "what@what.com",
+		"telegram": "",
+		"displayName": "",
+		"role": "admin",
+		"emailConfirmed": 0,
+		"columns": ["status", "notes", "tags", "proxy"],
+		"columnsWidth": null,
+		"theme": "dark",
+		"language": "en",
+		"promoId": 0,
+		"avatar": null,
+		"isAvatarDeleted": 0,
+		"avatarUpdateTime": null,
+		"sawAutomationOnboarding": 0,
+		"team": {
+			"isOwner": true,
+			"ownerEmail": "what@what.com",
+			"refUserId": 0,
+			"created_at": "2020-10-10T10:10:10.000000Z",
+			"usedPromo": 0,
+			"hadTransactions": false,
+			"syncEnabled": 1
+		},
+		"pinnedBrowserProfilesCount": 0,
+		"revenue": 0,
+		"subscription": {
+			"plan": "free",
+			"expiration": "2032-11-11 11:11:11",
+			"users": {
+				"limit": 1,
+				"count": 1
+			},
+			"browserProfiles": {
+				"limit": 10000,
+				"count": 1
+			},
+			"proxy": {
+				"limit": 10000,
+				"count": 1
+			}
+		},
+		"storage": null
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"current_page": 1,
+	"data": [],
+	"first_page_url": "http:\/\/127.0.0.1:5000\/browser_profiles?page=1",
+	"from": 1,
+	"next_page_url": null,
+	"path": "http:\/\/127.0.0.1:5000\/browser_profiles",
+	"per_page": "50",
+	"prev_page_url": null,
+	"to": 10,
+	"last_page": 1,
+	"total": 10
+}

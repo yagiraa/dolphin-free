@@ -1,0 +1,18 @@
+{
+	"data": {
+		"plan": "free",
+		"currency": "USD",
+		"expiration": "2032-11-11 11:11:11",
+		"start": "2020-10-10T10:10:10.000000Z",
+		"users": {
+			"limit": 1,
+			"count": 1,
+			"additionalUsers": 0
+		},
+		"browserProfiles": {
+			"limit": 10000,
+			"count": 1,
+			"additionalProfiles": 0
+		}
+	}
+}
