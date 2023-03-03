@@ -218,7 +218,6 @@ def browser_profile_launch_methods(browser_profile_id, method):
     elif (method == 'mark-as-stopped'):
         if (FIRST_TIME_RUNNING == True):
             resp = requests.delete(REMOTE_API_BASE_URL + '/browser_profiles', headers={'Authorization': request.headers['Authorization']}, json={"ids": [browser_profile_id]})
-            print(resp.text)
             FIRST_TIME_RUNNING = False
         with open('jsons/mark_as_running.json', 'r') as file:
             marked = json.load(file)
@@ -386,8 +385,6 @@ def scripts(info=None):
         resp = requests.get(REMOTE_API_BASE_URL + request.full_path, headers=request.headers)
         return resp.text
     elif (request.method == 'POST'):
-        if (request.path == '/proxy'):
-            print(request.json)
         resp = requests.post(REMOTE_API_BASE_URL + request.full_path, headers=request.headers, json=request.json)
         return resp.text
     elif (request.method == 'DELETE'):
