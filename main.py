@@ -102,9 +102,9 @@ def change_browser_config(changes, browser_profile_id, request):
         prx = {
             "id": info['id'],
             "name": info['name'],
-            "status": None if info['lastCheck'] is None else info['lastCheck']['status'],
+            "status": None if ('lastCheck' not in info or info['lastCheck'] is None) else info['lastCheck']['status'],
             "ip": info['host'],
-            "country": None if info['lastCheck'] is None else info['lastCheck']['country']
+            "country": None if ('lastCheck' not in info or info['lastCheck'] is None) else info['lastCheck']['country']
         }
         browser_profile_info_for_start['proxyId'] = info['id']
         browser_profile_info_for_start['proxy'] = prx
