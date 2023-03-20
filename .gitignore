@@ -1,0 +1,3 @@
+browsers/*
+!browsers/dont_delete.txt
+.idea
