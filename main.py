@@ -74,9 +74,9 @@ def get_path_files(path):
 
 
 def change_browser_config(changes, browser_profile_id, request):
-    with open(f'browsers/{browser_profile_id}/info.json', 'r') as file:
+    with open(f'{app.root_path}/browsers/{browser_profile_id}/info.json', 'r') as file:
         browser_profile_info = json.load(file)
-    with open(f'browsers/{browser_profile_id}/info_for_start.json', 'r') as file:
+    with open(f'{app.root_path}/browsers/{browser_profile_id}/info_for_start.json', 'r') as file:
         browser_profile_info_for_start = json.load(file)
 
     browser_profile_info['data'].update(changes)
@@ -102,9 +102,9 @@ def change_browser_config(changes, browser_profile_id, request):
         prx = {
             "id": info['id'],
             "name": info['name'],
-            "status": None if info['lastCheck'] is None else info['lastCheck']['status'],
+            "status": None if ('lastCheck' not in info or info['lastCheck'] is None) else info['lastCheck']['status'],
             "ip": info['host'],
-            "country": None if info['lastCheck'] is None else info['lastCheck']['country']
+            "country": None if ('lastCheck' not in info or info['lastCheck'] is None) else info['lastCheck']['country']
         }
         browser_profile_info_for_start['proxyId'] = info['id']
         browser_profile_info_for_start['proxy'] = prx
@@ -135,9 +135,9 @@ def change_browser_config(changes, browser_profile_id, request):
         browser_profile_info['data']['proxyId'] = 0
         browser_profile_info_for_start['proxyId'] = 0
 
-    with open(f'browsers/{browser_profile_id}/info.json', 'w') as file:
+    with open(f'{app.root_path}/browsers/{browser_profile_id}/info.json', 'w') as file:
         file.write(json.dumps(browser_profile_info, indent=4))
-    with open(f'browsers/{browser_profile_id}/info_for_start.json', 'w') as file:
+    with open(f'{app.root_path}/browsers/{browser_profile_id}/info_for_start.json', 'w') as file:
         file.write(json.dumps(browser_profile_info_for_start, indent=4))
 
     return browser_profile_info
@@ -146,12 +146,12 @@ def change_browser_config(changes, browser_profile_id, request):
 @app.route('/browser_profiles/<int:browser_profile_id>', methods=['GET', 'PATCH'])
 def get_profile(browser_profile_id):
     if (request.method == 'GET'):
-        if (os.path.exists(os.path.join(os.getcwd(), 'browsers', str(browser_profile_id), 'info.json')) == False):
+        if (os.path.exists(os.path.join(app.root_path, 'browsers', str(browser_profile_id), 'info.json')) == False):
             resp = requests.get(REMOTE_API_BASE_URL + request.full_path, headers=request.headers)
-            with open(f'browsers/{browser_profile_id}/info.json', 'w') as file:
+            with open(f'{app.root_path}/browsers/{browser_profile_id}/info.json', 'w') as file:
                 file.write(json.dumps(resp.json(), indent=4))
 
-        with open(f'browsers/{browser_profile_id}/info.json', 'r') as file:
+        with open(f'{app.root_path}/browsers/{browser_profile_id}/info.json', 'r') as file:
             browser_profile_info = json.load(file)
 
         return browser_profile_info
@@ -163,17 +163,17 @@ def get_profile(browser_profile_id):
 @app.route('/browser_profiles/<method>')
 def browser_profiles_additional_methods(method):
     if (method == 'available'):
-        profiles = get_path_files(os.path.join(os.getcwd(), 'browsers'))
-        with open('jsons/available.json', 'r') as file:
+        profiles = get_path_files(os.path.join(app.root_path, 'browsers'))
+        with open(f'{app.root_path}/jsons/available.json', 'r') as file:
             available = json.load(file)
         available['data']['ids'] = [int(i) for i in profiles]
         return available
     elif (method == 'statuses'):
-        with open(f'jsons/profile_statuses.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/profile_statuses.json', 'r') as file:
             profile_statuses = json.load(file)
         return profile_statuses
     elif (method == 'tags'):
-        with open(f'jsons/profile_tags.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/profile_tags.json', 'r') as file:
             profile_tags = json.load(file)
         return profile_tags
 
@@ -183,17 +183,17 @@ def sync_methods():
     action = request.args.get('actionType')
 
     if (action == 'getDatadirHash'):
-        with open('jsons/dirhash.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/dirhash.json', 'r') as file:
             dirhash = json.load(file)
         return dirhash
     elif (action == 'getDatadir'):
         browser_profile_id = request.args.get('browserProfileId')
-        if (os.path.exists(os.path.join(os.getcwd(), 'browsers', str(browser_profile_id), f'{browser_profile_id}.datadir.zip')) == False):
-            with open('jsons/browser_profile_not_found.json', 'r') as file:
+        if (os.path.exists(os.path.join(app.root_path, 'browsers', str(browser_profile_id), f'{browser_profile_id}.datadir.zip')) == False):
+            with open(f'{app.root_path}/jsons/browser_profile_not_found.json', 'r') as file:
                 browser_profile_not_found = json.load(file)
             return browser_profile_not_found
 
-        with open('jsons/download_link.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/download_link.json', 'r') as file:
             download = json.load(file)
         download['data']['link'] = f'{LOCAL_API_BASE_URL}/download_datadir/{browser_profile_id}'
         download['data']['links']['aws'] = f'{LOCAL_API_BASE_URL}/download_datadir/{browser_profile_id}'
@@ -203,7 +203,7 @@ def sync_methods():
 
 @app.route('/download_datadir/<browser_profile_id>')
 def download_datadir(browser_profile_id):
-    zip_path = f'browsers/{browser_profile_id}/{browser_profile_id}.datadir.zip'
+    zip_path = f'{app.root_path}/browsers/{browser_profile_id}/{browser_profile_id}.datadir.zip'
     return send_file(zip_path, as_attachment=True)
 
 
@@ -212,14 +212,14 @@ def browser_profile_launch_methods(browser_profile_id, method):
     global FIRST_TIME_RUNNING
 
     if (method == 'mark-as-running'):
-        with open('jsons/mark_as_running.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/mark_as_running.json', 'r') as file:
             marked = json.load(file)
         return marked
     elif (method == 'mark-as-stopped'):
         if (FIRST_TIME_RUNNING == True):
             resp = requests.delete(REMOTE_API_BASE_URL + '/browser_profiles', headers={'Authorization': request.headers['Authorization']}, json={"ids": [browser_profile_id]})
             FIRST_TIME_RUNNING = False
-        with open('jsons/mark_as_running.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/mark_as_running.json', 'r') as file:
             marked = json.load(file)
         return marked
     elif (method == 'canUpdate'):
@@ -233,9 +233,9 @@ def upload_archive():
         browser_profile_id = request.args.get('browserProfileId')
         run_id = request.args.get('runId')
         archive = request.files[f'file']
-        archive.save(f'browsers/{browser_profile_id}/{browser_profile_id}.datadir.zip')
+        archive.save(f'{app.root_path}/browsers/{browser_profile_id}/{browser_profile_id}.datadir.zip')
 
-        with open('jsons/successfull_upload.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/successfull_upload.json', 'r') as file:
             successfull_upload = json.load(file)
         successfull_upload['browserProfileId'] = browser_profile_id
 
@@ -244,27 +244,27 @@ def upload_archive():
 
 @app.route('/team/users')
 def get_team():
-    with open(f'jsons/team.json', 'r') as file:
+    with open(f'{app.root_path}/jsons/team.json', 'r') as file:
         team = json.load(file)
     return team
 
 
 @app.route('/profile')
 def profile():
-    with open(f'jsons/profile.json', 'r') as file:
+    with open(f'{app.root_path}/jsons/profile.json', 'r') as file:
         profile_info = json.load(file)
 
-    profiles = get_path_files(os.path.join(os.getcwd(), 'browsers'))
+    profiles = get_path_files(os.path.join(app.root_path, 'browsers'))
     profile_info['data']['subscription']['browserProfiles']['count'] = len(profiles)
     return profile_info
 
 
 @app.route('/subscription')
 def subscription():
-    with open(f'jsons/subscription.json', 'r') as file:
+    with open(f'{app.root_path}/jsons/subscription.json', 'r') as file:
         subscription_info = json.load(file)
 
-    profiles = get_path_files(os.path.join(os.getcwd(), 'browsers'))
+    profiles = get_path_files(os.path.join(app.root_path, 'browsers'))
     subscription_info['data']['browserProfiles']['count'] = len(profiles)
 
     return subscription_info
@@ -272,7 +272,7 @@ def subscription():
 
 @app.route('/branches')
 def check_local_api():
-    with open(f'jsons/local_api_info.json', 'r') as file:
+    with open(f'{app.root_path}/jsons/local_api_info.json', 'r') as file:
         local_api_info = json.load(file)
     return local_api_info
 
@@ -305,16 +305,16 @@ def browser_profiles():
         settings['page'] = int(settings['page'])
         settings['limit'] = int(settings['limit'])
 
-        profiles = get_path_files(os.path.join(os.getcwd(), 'browsers'))
+        profiles = get_path_files(os.path.join(app.root_path, 'browsers'))
 
-        with open(f'jsons/all_profiles.json', 'r') as file:
+        with open(f'{app.root_path}/jsons/all_profiles.json', 'r') as file:
             all_profiles = json.load(file)
 
         first_profile = (settings['page'] - 1) * settings['limit']
         last_profile = len(profiles) if (settings['page'] * settings['limit'] > len(profiles)) else settings['page'] * settings['limit']
 
         for i in profiles[first_profile:last_profile]:
-            with open(f'browsers/{i}/info_for_start.json', 'r') as file:
+            with open(f'{app.root_path}/browsers/{i}/info_for_start.json', 'r') as file:
                 profile_info = json.load(file)
             all_profiles['data'].append(profile_info)
 
@@ -347,11 +347,11 @@ def browser_profiles():
         ret_val = resp.text
         browser_profile_id = resp.json()['browserProfileId']
 
-        Path(os.path.join(os.getcwd(), 'browsers', str(browser_profile_id))).mkdir(parents=True, exist_ok=True)
+        Path(os.path.join(app.root_path, 'browsers', str(browser_profile_id))).mkdir(parents=True, exist_ok=True)
         resp = requests.get(REMOTE_API_BASE_URL + '/browser_profiles', headers={'Authorization': request.headers['Authorization']})
         for i in resp.json()['data']:
             if (i['id'] == browser_profile_id):
-                with open(f'browsers/{browser_profile_id}/info_for_start.json', 'w') as file:
+                with open(f'{app.root_path}/browsers/{browser_profile_id}/info_for_start.json', 'w') as file:
                     file.write(json.dumps(i, indent=4))
                 break
 
@@ -361,7 +361,7 @@ def browser_profiles():
         return ret_val
     elif (request.method == 'DELETE'):
         for i in request.json['ids']:
-            shutil.rmtree(os.path.join(os.getcwd(), 'browsers', str(i)))
+            shutil.rmtree(os.path.join(app.root_path, 'browsers', str(i)))
 
         return {"success": True}
 
