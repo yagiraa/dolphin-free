@@ -197,7 +197,10 @@ def change_browser_config(changes, browser_profile_id, request):
         browser_profile_info['data']['proxyId'] = 0
         browser_profile_info['data']['proxy'] = None
         browser_profile_info_for_start['proxyId'] = 0
-        del browser_profile_info_for_start['proxy']
+        try:
+            del browser_profile_info_for_start['proxy']
+        except:
+            pass
 
     Files.save_to_file(f'browsers/{browser_profile_id}/info.json', browser_profile_info)
     Files.save_to_file(f'browsers/{browser_profile_id}/info_for_start.json', browser_profile_info_for_start)
