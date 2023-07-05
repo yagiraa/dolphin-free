@@ -35,11 +35,11 @@
 				"count": 1
 			},
 			"browserProfiles": {
-				"limit": 10000,
+				"limit": 1000000,
 				"count": 1
 			},
 			"proxy": {
-				"limit": 10000,
+				"limit": 1000000,
 				"count": 1
 			}
 		},

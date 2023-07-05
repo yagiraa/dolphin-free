@@ -1,0 +1,11 @@
+{
+	"data": {
+		"id": 666666666,
+		"browserProfileId": 66666666,
+		"teamId": 1111111,
+		"userId": 1111111,
+		"type": "stop",
+		"created_at": "2022-02-02T02:02:02.000000Z"
+	},
+	"totalSessionDuration": 66666
+}
