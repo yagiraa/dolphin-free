@@ -12,7 +12,10 @@ from flask import request
 
 def get_path_files(path):
     files = os.listdir(path)
-    files.remove('dont_delete.txt')
+    try:
+        files.remove('dont_delete.txt')
+    except:
+        pass
 
     return files
 
