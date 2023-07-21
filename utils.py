@@ -44,7 +44,8 @@ def send_request(method, url, headers={}, payload={}):
 
         except Exception as error:
             logger.error(f'Unexcepted error while sending request to {url}: {error}')
-            sleep(1)
+
+        sleep(3)
 
 
 def check_token_expire(func):
